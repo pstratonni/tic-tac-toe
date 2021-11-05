@@ -63,11 +63,11 @@ def play(field, win):
     while True:
         append_X_0("X", field, win)
         count_step += 1
-        if count_step == 9:
-            print("Ничья")
-            break
         check = check_win("X", win)
         if check:
+            break
+        if count_step == 9:
+            print("Ничья")
             break
         append_X_0("0", field, win)
         count_step += 1
