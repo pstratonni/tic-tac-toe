@@ -1,25 +1,22 @@
 def render_field(field):
     for i in range(4):
         if i != 0:
-            print(i, end=' ', flush=True)
+            print(i, end=' ')
             continue
-        print(' ', end=' ', flush=True)
+        print(' ', end=' ')
     print()
     for i in range(3):
-        print(i + 1, end=' ', flush=True)
-        for j in range(3):
-            print(field[i][j], end=' ')
-        print('')
+        print(i + 1, ' '.join(field[i]))
 
 
 def append_field(coor, who, field):
-    if all([0 < i < 4 for i in coor]):
-        if field[coor[0] - 1][coor[1] - 1] != '-':
-            return True
-        else:
-            field[coor[0] - 1][coor[1] - 1] = who
-    else:
+    if not all([0 < i < 4 for i in coor]):
         return True
+    if field[coor[0] - 1][coor[1] - 1] != '-':
+        return True
+    else:
+        field[coor[0] - 1][coor[1] - 1] = who
+
 
 def append_X_0(who, field, win):
     while True:
@@ -28,6 +25,9 @@ def append_X_0(who, field, win):
             coor = tuple(map(int, input().split()))
         except ValueError:
             print('Упс. Координаты - это числа, которые вводятся через пробел.\nПопробуй ещё раз')
+            continue
+        if len(coor) != 2:
+            print('Нужно две координаты')
             continue
         if not append_field(coor, who, field):
             append_field(coor, who, field)
@@ -61,19 +61,15 @@ def check_win(who, win):
 def play(field, win):
     count_step = 0
     while True:
-        append_X_0("X", field, win)
         count_step += 1
-        check = check_win("X", win)
+        append_X_0("X", field, win) if count_step % 2 == 1 else append_X_0("0", field, win)
+        check = check_win("X", win) if count_step % 2 == 1 else check_win("0", win)
         if check:
             break
         if count_step == 9:
             print("Ничья")
             break
-        append_X_0("0", field, win)
-        count_step += 1
-        check = check_win("0", win)
-        if check:
-            break
+
 
 
 def main():
